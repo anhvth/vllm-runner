@@ -45,8 +45,7 @@ def forward(
     torch.save(
         {
             "input_ids": input_ids.cpu(),
-            "hidden_states": hidden_states.cpu(),
-            "positions": positions.cpu(),
+            "hidden_states": hidden_states.half().cpu(),
         },
         f"{current_cache_dir}/{idx}.pt",
     )
