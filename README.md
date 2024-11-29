@@ -5,9 +5,10 @@ The '--tp' flag is used to set the number of tensor parallelism (TP) to 2.
 Usage:
 ```bash
 python -m vllm_runner.run <checkpoint_path> <input_text_path> <output_text_path> --tp <tensor_parallelism>
+```
 
 ## Expected Input Format
-
+The input should be a JSON file named `input.json` with the following structure:
 ```json
 {
     "texts": [
@@ -19,7 +20,7 @@ python -m vllm_runner.run <checkpoint_path> <input_text_path> <output_text_path>
 ```
 
 ## Expected Output Format
-
+The output should be a JSON file named `output.pt` with the following structure:
 ```json
 {
     "text1": "embedding1",
