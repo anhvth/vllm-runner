@@ -95,7 +95,7 @@ def load_and_split_data(tokenizer):
 def run_embedding(
     model_path: str,
     inputs: list[str],
-    clean_after_run: bool = False,
+    clean_after_run: bool = True,
     tp=2,
 ):
     assert isinstance(inputs, list), "Input must be a list of texts."
