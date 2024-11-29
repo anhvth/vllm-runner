@@ -94,24 +94,32 @@ def load_and_split_data(tokenizer):
 
 
 def run_embedding(
-    MODEL_14B_PATH: str, inputs: list[str], clean_after_run: bool = False
+    model_path: str,
+    inputs: list[str],
+    clean_after_run: bool = False,
+    tp=2,
 ):
+    assert isinstance(inputs, list), "Input must be a list of texts."
+    assert isinstance(inputs[0], str), "Input must be a list of texts."
+    # os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(i) for i in devices])
+    print("First text:", inputs[0])
+    global current_cache_dir  # Add this line
+    input_id = identify(inputs)
+    current_cache_dir = os.path.join(CACHE_DIR, input_id)  # Update this line
+    clean_cache(current_cache_dir)  # Update this line
     model = vllm.LLM(
-        MODEL_14B_PATH,
-        tensor_parallel_size=2,
+        model_path,
+        tensor_parallel_size=tp,
         max_model_len=1024,
         dtype=torch.float16,
         enforce_eager=True,
-        quantization="awq" if "awq" in MODEL_14B_PATH.lower() else None,
+        quantization="awq" if "awq" in model_path.lower() else None,
     )
     tokenizer = model.get_tokenizer()
 
     print("Num input:", len(inputs))
 
     # Generate model outputs
-    input_id = identify(inputs)
-    cache_dir = os.path.join(CACHE_DIR, input_id)
-    clean_cache(cache_dir)
     model.generate(  # return nothing but save cache
         inputs,
         sampling_params=vllm.SamplingParams(
@@ -133,5 +141,12 @@ def run_embedding(
         if text in inputs:
             text2embed[text] = hidden_states[-1]
     if clean_after_run:
-        clean_cache(cache_dir)
+        clean_cache(current_cache_dir)  # Update this line
     return text2embed
+
+
+if __name__ == "__main__":
+    # Example
+    import fire
+
+    fire.Fire(run_embedding)
