@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "vllm-runner"
+version = "0.0.1"
+description = "A simple runner for VLLM"
+authors = ["AnhVTH <anhvth.226@gmail.com>"]
+readme = "README.md"
+homepage = "https://github.com/anhvth/speedy"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+numpy = "^1.26"
+requests = "^2.32"
+xxhash = "^3.5"
+fastcore = "^1.7"
+tabulate = "^0.9"
